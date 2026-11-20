@@ -542,7 +542,7 @@ public final class ElytronXmlParser {
                         if (isSet(foundBits, 10)) throw reader.unexpectedElement();
                         foundBits = setBit(foundBits, 10);
                         if (!xmlVersion.isAtLeast(Version.VERSION_1_8_PREVIEW)) throw reader.unexpectedElement();
-                        acceptOcspStapling = parseOcspStaplingType(reader, trustManagerBuilder, xmlVersion, keyStoresMap);
+                        acceptOcspStapling = parseOcspStaplingType(reader, trustManagerBuilder, keyStoresMap);
                         break;
                     }
                     default: throw reader.unexpectedElement();
@@ -603,7 +603,7 @@ public final class ElytronXmlParser {
         throw reader.unexpectedDocumentEnd();
     }
 
-    private static boolean parseOcspStaplingType(ConfigurationXMLStreamReader reader, TrustManagerBuilder builder, Version xmlVersion, Map<String, ExceptionSupplier<KeyStore, ConfigXMLParseException>> keyStoresMap) throws ConfigXMLParseException {
+    private static boolean parseOcspStaplingType(ConfigurationXMLStreamReader reader, TrustManagerBuilder builder, Map<String, ExceptionSupplier<KeyStore, ConfigXMLParseException>> keyStoresMap) throws ConfigXMLParseException {
         final int attributeCount = reader.getAttributeCount();
         boolean acceptOcspStapling = false;
         boolean gotAcceptOcsp = false;
@@ -616,7 +616,6 @@ public final class ElytronXmlParser {
             switch (reader.getAttributeLocalName(i)) {
                 case "accept-ocsp": {
                     if (gotAcceptOcsp) throw reader.unexpectedAttribute(i);
-                    if (!xmlVersion.isAtLeast(Version.VERSION_1_8_PREVIEW)) throw reader.unexpectedAttribute(i);
                     gotAcceptOcsp = true;
                     acceptOcspStapling = reader.getBooleanAttributeValueResolved(i);
                     builder.setOcspStapling(acceptOcspStapling);
@@ -624,7 +623,6 @@ public final class ElytronXmlParser {
                 }
                 case "soft-fail": {
                     if (gotSoftFail) throw reader.unexpectedAttribute(i);
-                    if (!xmlVersion.isAtLeast(Version.VERSION_1_8_PREVIEW)) throw reader.unexpectedAttribute(i);
                     gotSoftFail = true;
                     builder.setStaplingSoftFail(reader.getBooleanAttributeValueResolved(i));
                     break;

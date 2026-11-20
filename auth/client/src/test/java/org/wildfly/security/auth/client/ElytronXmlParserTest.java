@@ -181,7 +181,7 @@ public class ElytronXmlParserTest {
     }
 
     @Test
-    public void checkSSLContextWithOCSPStapling() throws Exception {
+    public void testCheckSSLContextWithOCSPStapling() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8.xml");
         SecurityFactory<AuthenticationContext> authContext = ElytronXmlParser.parseAuthenticationClientConfiguration(config.toURI());
         Assert.assertNotNull(authContext);
@@ -190,8 +190,7 @@ public class ElytronXmlParserTest {
         // Actually build the SSL contexts so the accept-ocsp-stapling trust-manager path is exercised
         // (a non-null getSslRules() alone never invokes the SSLContext supplier).
 
-        // accept-ocsp-stapling without a responder certificate - the default use case (ELY-434 B1).
-        // Before the null-guard was added this threw a NullPointerException while building the context.
+        // accept-ocsp-stapling without a responder certificate - the default use case.
         checkSSLContext(authContext, "http://stapling-no-responder");
 
         // accept-ocsp-stapling with an explicit responder certificate.
@@ -203,7 +202,7 @@ public class ElytronXmlParserTest {
      * responder-certificate or responder-keystore of its own) must parse and build.
      */
     @Test
-    public void checkSSLContextWithOCSPStaplingCombinedWithOcsp() throws Exception {
+    public void testCheckSSLContextWithOCSPStaplingCombinedWithOcsp() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8.xml");
         SecurityFactory<AuthenticationContext> authContext = ElytronXmlParser.parseAuthenticationClientConfiguration(config.toURI());
         checkSSLContext(authContext, "http://stapling-with-ocsp");
@@ -215,7 +214,7 @@ public class ElytronXmlParserTest {
      * responder-keystore.
      */
     @Test
-    public void staplingConflictingWithOcspIsRejected() throws Exception {
+    public void testStaplingConflictingWithOcspIsRejected() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8-stapling-conflicts-with-ocsp.xml");
         try {
             ElytronXmlParser.parseAuthenticationClientConfiguration(config.toURI());
@@ -229,7 +228,7 @@ public class ElytronXmlParserTest {
      * ELY-434: an accept-ocsp-stapling context without a trust-store or trust-manager must be rejected.
      */
     @Test
-    public void staplingWithoutTrustManagerIsRejected() throws Exception {
+    public void testStaplingWithoutTrustManagerIsRejected() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8-stapling-no-trust.xml");
         try {
             ElytronXmlParser.parseAuthenticationClientConfiguration(config.toURI());
@@ -243,7 +242,7 @@ public class ElytronXmlParserTest {
      * ELY-434: a responder-keystore specified without a responder-certificate must be rejected.
      */
     @Test
-    public void staplingResponderKeystoreWithoutCertificateIsRejected() throws Exception {
+    public void testStaplingResponderKeystoreWithoutCertificateIsRejected() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8-stapling-responder-keystore-no-cert.xml");
         try {
             ElytronXmlParser.parseAuthenticationClientConfiguration(config.toURI());
@@ -257,7 +256,7 @@ public class ElytronXmlParserTest {
      * ELY-434: a responder-keystore that names an undefined key-store must be rejected.
      */
     @Test
-    public void staplingUnknownResponderKeystoreIsRejected() throws Exception {
+    public void testStaplingUnknownResponderKeystoreIsRejected() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8-stapling-unknown-responder-keystore.xml");
         try {
             ElytronXmlParser.parseAuthenticationClientConfiguration(config.toURI());
@@ -272,7 +271,7 @@ public class ElytronXmlParserTest {
      * rejected.
      */
     @Test
-    public void staplingUnknownResponderCertificateIsRejected() throws Exception {
+    public void testStaplingUnknownResponderCertificateIsRejected() throws Exception {
         URL config = getClass().getResource("test-wildfly-config-v1_8-stapling-unknown-responder-cert.xml");
         // The missing alias is detected when the trust manager is built (during parse, since the SSL
         // contexts are built eagerly), so cover both the parse and the create paths.

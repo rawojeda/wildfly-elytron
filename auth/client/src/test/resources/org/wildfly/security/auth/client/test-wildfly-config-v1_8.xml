@@ -32,8 +32,7 @@
             </key-store>
         </key-stores>
         <ssl-contexts>
-            <!-- accept-ocsp-stapling with a trust-store but NO responder-certificate: the default
-                 use case. Building this context exercises the trust-manager stapling path (ELY-434 B1). -->
+            <!-- accept-ocsp-stapling with a trust-store but NO responder-certificate: the default use case. -->
             <ssl-context name="client-ssl-context-stapling-no-responder">
                 <trust-store key-store-name="client-keystore"/>
                 <accept-ocsp-stapling accept-ocsp="true"/>

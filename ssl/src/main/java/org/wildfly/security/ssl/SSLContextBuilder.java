@@ -325,6 +325,10 @@ public final class SSLContextBuilder {
      * With {@code false}, the property is left untouched, so a value set with {@code -D} still
      * applies.
      *
+     * <p>This only has effect for server-side contexts. It is ignored when {@link #setClientMode(boolean)}
+     * is {@code true}. A server that provides stapled responses may add latency to the first handshake,
+     * while the response is obtained.
+     *
      * @param provideOCSPStapling {@code true} to enable server-side OCSP stapling for the context this builder creates
      * @return this builder
      */
@@ -427,7 +431,7 @@ public final class SSLContextBuilder {
         });
     }
 
-    /** Restore a JVM-wide property to its exact prior value if it was absent before. */
+    /** Restore a JVM-wide property to its prior value, or clear it if it was absent before. */
     private static void restoreProperty(final String name, final String previousValue) {
         if (previousValue != null) {
             System.setProperty(name, previousValue);

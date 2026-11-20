@@ -91,6 +91,7 @@
                 <xsd:annotation>
                     <xsd:documentation>
                         Indicates whether the client will accept OCSP stapled responses from the server.
+                        An empty accept-ocsp-stapling element has no effect; accept-ocsp must be true to enable it.
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
@@ -116,6 +117,14 @@
     </xsd:complexType>
 
     <xsd:complexType name="accept-ocsp-stapling-type">
+        <xsd:annotation>
+            <xsd:documentation>
+                An empty element has no effect because accept-ocsp defaults to false.
+                When enabled without ocsp or certificate-revocation-list configuration, revocation is checked for the entire certificate path.
+                If a certificate has no revocation source and soft-fail is false, the connection is rejected.
+                Set only-leaf-cert=true on trust-manager to limit checking to the leaf.
+            </xsd:documentation>
+        </xsd:annotation>
         <xsd:attribute name="accept-ocsp" type="xsd:boolean" use="optional" default="false">
             <xsd:annotation>
                 <xsd:documentation>
